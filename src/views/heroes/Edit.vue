@@ -10,7 +10,7 @@
         <label for="exampleInputPassword1">性别</label>
         <input type="text" v-model="formData.gender" class="form-control" id="exampleInputPassword1" placeholder="性别">
       </div>
-      <button type="button" class="btn btn-success">Submit</button>
+      <button type="button" @click="heroUpdata" class="btn btn-success">Submit</button>
     </form>
   </div>
 </template>
@@ -39,6 +39,21 @@ export default {
       .catch((err) => {
         console.log(err);
       })
+  },
+  methods: {
+    heroUpdata() {
+      axios
+        .patch(`http://localhost:3000/heroes/${this.id}`, this.formData)
+        .then((response) => {
+          console.log(response);
+          if(response.status == 200) {
+            this.$router.push('/heroes');
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    }
   }
 }
 </script>

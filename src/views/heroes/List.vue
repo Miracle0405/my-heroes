@@ -22,7 +22,8 @@
               <!-- <a href="edit.html">edit</a> -->
               <router-link :to="'/heroes/'+item.id">edit</router-link>
               &nbsp;&nbsp;
-              <a href="javascript:window.confirm('Are you sure?')">delete</a>
+              <a @click.prevent="heroesDelete(item.id)" href="javascript:void(0)">delete</a>
+              <!-- <router-link :to="'/heroes/'+item.id">delete</router-link> -->
             </td>
           </tr>
         </tbody>
@@ -41,19 +42,38 @@ export default {
   },
   // Vue实例创建以后 data methods可以访问
   created() {
-    axios
-      .get('http://localhost:3000/heroes')
-      .then((response) => {
-        console.log(response);
-        if(response.status == 200) {
-          this.list = response.data;
-        }
-      }) 
-      .catch((err) => {
-        console.log(err);
-      })
+    this.loadHero();
+  },
+  methods: {
+    loadHero() {
+      axios
+        .get('http://localhost:3000/heroes')
+        .then((response) => {
+          console.log(response);
+          if(response.status == 200) {
+            this.list = response.data;
+          }
+        }) 
+        .catch((err) => {
+          console.log(err);
+        })
+    },
+    heroesDelete(id) {
+      axios
+        .delete(`http://localhost:3000/heroes/${id}`)
+        .then((response) => {
+          // console.log(response);
+          if(response.status == 200) {
+            this.loadHero();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    }
   }
 }
+
 </script>
 
 <style>
